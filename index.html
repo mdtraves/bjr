@@ -6,43 +6,65 @@
     <title>Bramley</title>
 </head>
 <body>
-    Bramley
+
+    <h1>Under 7's</h1>
+
+    <p>Game 1</p>
+    <div id="G1">
+        <p>LFC <span id="G1T1" onclick="score(1, 'team1Goals', 1)">0</span></p>
+        <p>AFC <span id="G1T2">0</span></p>
+    </div>
 
 
     <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js'
-
-    // If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
     import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js'
-    import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"
+    import { getDatabase, set, ref, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"
 
 
-       // TODO: Replace the following with your app's Firebase project configuration
-       const firebaseConfig = {
-            apiKey: "AIzaSyDnOvUmGiN8txOjKQ9DFG0g8V_2xUIOL6c",
-            authDomain: "bramleyjr2023.firebaseapp.com",
-            databaseURL: "https://bramleyjr2023-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "bramleyjr2023",
-            storageBucket: "bramleyjr2023.appspot.com",
-            messagingSenderId: "530663509573",
-            appId: "1:530663509573:web:f3b418b649b3e63c835d2c",
-            measurementId: "G-M2VZQW35D2"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnOvUmGiN8txOjKQ9DFG0g8V_2xUIOL6c",
+        authDomain: "bramleyjr2023.firebaseapp.com",
+        databaseURL: "https://bramleyjr2023-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "bramleyjr2023",
+        storageBucket: "bramleyjr2023.appspot.com",
+        messagingSenderId: "530663509573",
+        appId: "1:530663509573:web:f3b418b649b3e63c835d2c",
+        measurementId: "G-M2VZQW35D2"
+    };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
 
-    function writeUserData(userId, name) {
+    function writeUserData(key, val) {
         const db = getDatabase();
-        set(ref(db, 'users/' + userId), {
-            username: name,
+        set(ref(db, 'matches/two/'), {
+            team1: val,
            
         });
     }
 
-    writeUserData(2,'Mike')
+    const db = getDatabase();
+        const starCountRef = ref(db, 'matches/');
+        onValue(starCountRef, (snapshot) => {
+        const data = snapshot.val();
+        console.log(data)
+        for (const [key, value] of Object.entries(data)) {
+            console.log(value.team2);
+            }
+        
+    });
 
+    function score(game, team, score){
+        const db = getDatabase();
+        set(ref(db, `matches/${game}/`), {
+            team : score,
+           
+        });
 
+    }
+
+    // writeUserData('team 1','lfc')
+    score(1, 'team1Goals', 1)
   </script>
 </body>
 </html>
