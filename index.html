@@ -6,13 +6,33 @@
     <title>Bramley</title>
     <style>
         input{
-            width: 50px;
+            width: 20px;
+            padding: 5px;
+            margin: 3px;
         }
+
+        .flex{
+          display: flex;
+          align-items: center;
+        }
+
+        p{
+          margin: 3px 3px;
+        }
+
+        h3{
+          margin-bottom: 5px;
+        }
+
+       
 
         #fixtureList p{
             width: 100px;
             display: block;
             margin: 0 3px;
+        }
+        #fixtureList  .time{
+          margin-right: 20px;
         }
 
         #fixtureList div{
@@ -25,22 +45,34 @@
     </style>
 </head>
 <body>
-
-    <h3>Add Game</h3>
-    <input type="number" name="gameNumber" id="gameNumber" placeholder="Game Number">
-    <input type="text" name="homeTeam" id="homeTeam" placeholder="Home Team">
-    <input type="text" name="awayTeam" id="awayTeam" placeholder="Away Team">
-    <input type="submit" value="submit" id="submit">
+    <div class="flex" style="justify-content: center;">
+      <h2>Live Scores</h2>
+    </div>
+    <div class="flex" style="justify-content: center;">
+      <h3>Add Game</h3>
+    </div>
+    <div class="flex" style="justify-content: center; width: 100%;">
+      <input type="number" name="gameNumber" id="gameNumber" placeholder="Game Number" style="width:20vw; margin:5px; padding:5px">
+      <input type="text" name="homeTeam" id="homeTeam" placeholder="Home Team" style="width:20vw; margin:5px; padding:5px">
+      <input type="text" name="awayTeam" id="awayTeam" placeholder="Away Team" style="width:20vw; margin:5px; padding:5px">
+      <input type="submit" value="submit" id="submit" style="width:20vw; margin:5px; background-color: darkblue; color: white; border-radius: 5px; padding:5px">
+    </div>
 
     <h3>Fixtures</h3>
     <div id="fixtureList" style="margin-bottom: 20px; display: flex; flex-direction: column;">
 
     </div>
 
+    <h3>Table</h3>
+    <div class="flex">
+      <p style="width:80px">Team </p><p style="width:40px">Pts  </p><p style="width:40px">For</p>
 
-    <div class="flex justify-center mt-2">
-        <table id="friends-league" class="rounded shadow-lg"></table>
-    <div>
+    </div>
+    <div id="league" style="margin-bottom: 20px; display: flex; flex-direction: column;">
+    </div>
+
+
+  
 
 
     <script type="module">
@@ -61,6 +93,23 @@
 
     const app = initializeApp(firebaseConfig);
 
+      // ADD GAME //
+      document.getElementById ("submit").addEventListener ("click",  function (){
+        const db = getDatabase();
+        let gameNumber = document.getElementById('gameNumber').value
+        let homeTeam = document.getElementById('homeTeam').value
+        let awayTeam = document.getElementById('awayTeam').value
+        // console.log(gameNumber)
+        set(ref(db, `matches/${gameNumber}/`), {
+            homeTeam : homeTeam,
+            awayTeam : awayTeam,
+            homeGoals : 0,
+            awayGoals : 0,
+            time : "12:00"
+        });
+      });
+      // ADD GAME //
+
 
     // DISPLAY FIXTURES //
     const db = getDatabase();
@@ -75,7 +124,7 @@
             // console.log("i : ",i);
             // console.log("data :", data);
             const span = document.createElement("span");
-            span.innerHTML = `<div><p class="time">${data[i].time}</p><p>${data[i].homeTeam}</p><input class="goals" h_a="H" gameNo="${i}" type="number" value="${data[i].homeGoals}" /><input type="number" class="goals" h_a="A" gameNo="${i}"  value="${data[i].awayGoals}" /><p>${data[i].awayTeam}</p></div>`
+            span.innerHTML = `<div class='flex'><p class="time">${data[i].time}</p><p>${data[i].homeTeam}</p><input class="goals" h_a="H" gameNo="${i}" type="number" value="${data[i].homeGoals}" /><input type="number" class="goals" h_a="A" gameNo="${i}"  value="${data[i].awayGoals}" /><p>${data[i].awayTeam}</p></div>`
             // console.log(data[i]);
             if(data[i]){
                 fixtureList.append(span);
@@ -83,22 +132,8 @@
 
         }
     });
+    // DISPLAY FIXTURES //
 
-    // ADD GAME //
-    document.getElementById ("submit").addEventListener ("click",  function (){
-        const db = getDatabase();
-        let gameNumber = document.getElementById('gameNumber').value
-        let homeTeam = document.getElementById('homeTeam').value
-        let awayTeam = document.getElementById('awayTeam').value
-        // console.log(gameNumber)
-        set(ref(db, `matches/${gameNumber}/`), {
-            homeTeam : homeTeam,
-            awayTeam : awayTeam,
-            homeGoals : 0,
-            awayGoals : 0,
-            time : "12:00"
-        });
-    } );
 
     // GOAL SCORED //
     document.body.addEventListener( 'change', function ( event ) {
@@ -130,7 +165,80 @@
         }
         
     } );
+    // GOAL SCORED //
 
+
+    // SHOW TABLE //
+        var league = document.getElementById('league')
+        onValue(matchesDB, (snapshot) => {
+        const data = snapshot.val();
+
+        const leagueTable = {};
+
+        // Iterate through each match result
+        data.forEach(match => {
+          const awayGoals = parseInt(match.awayGoals);
+          const homeGoals = parseInt(match.homeGoals);
+          const awayTeam = match.awayTeam;
+          const homeTeam = match.homeTeam;
+
+          // Update the statistics for the away team
+          if (!leagueTable[awayTeam]) {
+            leagueTable[awayTeam] = { points: 0, goalsScored: 0 };
+          }
+          leagueTable[awayTeam].goalsScored += awayGoals;
+
+          // Update the statistics for the home team
+          if (!leagueTable[homeTeam]) {
+            leagueTable[homeTeam] = { points: 0, goalsScored: 0 };
+          }
+          leagueTable[homeTeam].goalsScored += homeGoals;
+
+          // Update points based on the match result
+          if (awayGoals > homeGoals) {
+            leagueTable[awayTeam].points += 3;
+          } else if (awayGoals < homeGoals) {
+            leagueTable[homeTeam].points += 3;
+          } else {
+            leagueTable[awayTeam].points += 1;
+            leagueTable[homeTeam].points += 1;
+          }
+        });
+
+        // Sort the teams based on points and goals scored
+        const sortedTeams = Object.entries(leagueTable).sort((a, b) => {
+          const pointsDiff = b[1].points - a[1].points;
+          if (pointsDiff !== 0) {
+            return pointsDiff;
+          }
+          return b[1].goalsScored - a[1].goalsScored;
+        });
+
+        // Display the league table
+        var league = document.getElementById('league')
+        league.innerHTML = ''
+
+    
+        console.log("League Table:");
+        console.log(`${"Team".padEnd(10)} ${"Points".padEnd(10)} ${"Goals Scored".padEnd(10)}`);
+
+
+        sortedTeams.forEach(([team, stats]) => {
+          const { points, goalsScored } = stats;
+          console.log(`${team.padEnd(10)} ${points.toString().padEnd(10)} ${goalsScored.toString().padEnd(10)}`);
+          const div = document.createElement("div");
+          div.classList.add("flex")
+
+          div.innerHTML = `<p style="width:80px">${team.padEnd(10)} </p><p style="width:40px"> ${points.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsScored.toString().padEnd(10)}</p>`
+          league.append(div) 
+
+        });
+
+        });
+
+      
+
+    
 
 
 
@@ -141,132 +249,132 @@
   
 
    
-    let matches = [
-        { home: "Reds", away: "Blues", result: "1-1" },
-        { home: "Yellows", away: "Whites", result: "2-3" },
-        { home: "Oranges", away: "Reds", result: "0-0" },
-        { home: "Blues", away: "Yellows", result: "2-0" },
-        { home: "Whites", away: "Oranges", result: "1-0" },
-        { home: "Reds", away: "Yellows", result: "1-1" },
-        { home: "Whites", away: "Blues", result: "3-3" },
-        { home: "Oranges", away: "Yellows", result: "1-0" },
-        { home: "Reds", away: "Whites", result: "1-2" },
-        { home: "Oranges", away: "Blues", result: "3-1" },
-    ]
+//     let matches = [
+//         { home: "Reds", away: "Blues", result: "1-1" },
+//         { home: "Yellows", away: "Whites", result: "2-3" },
+//         { home: "Oranges", away: "Reds", result: "0-0" },
+//         { home: "Blues", away: "Yellows", result: "2-0" },
+//         { home: "Whites", away: "Oranges", result: "1-0" },
+//         { home: "Reds", away: "Yellows", result: "1-1" },
+//         { home: "Whites", away: "Blues", result: "3-3" },
+//         { home: "Oranges", away: "Yellows", result: "1-0" },
+//         { home: "Reds", away: "Whites", result: "1-2" },
+//         { home: "Oranges", away: "Blues", result: "3-1" },
+//     ]
 
-let data = [];
+// let data = [];
 
-function getDataFromMatches(matches) {    
-  matches.forEach((match) => {
-    let homeTeam = match.home;
-    let awayTeam = match.away;
-    let homeGoals = match.result.split("-")[0];
-    let awayGoals = match.result.split("-")[1];
-    let index = data.findIndex(team => team.NAME === homeTeam);
-    // Home team non-existant in array, let's create it with default scores
-    if (index === -1) {
-      data.push({NAME: homeTeam, PL: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, P: 0});
-    }
-    index = data.findIndex(team => team.NAME === awayTeam);
-    // Away team non-existant in array, let's create it with default scores
-    if (index === -1) {
-      data.push({NAME: awayTeam, PL: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, P: 0});
-    }
-    // parseInt is neccesary because goals are strings at this point
-    processMatchResult(data, homeTeam, awayTeam, parseInt(homeGoals, 10), parseInt(awayGoals, 10));
-  });
-  // data is filled, let's sort it by points, goal difference, goals for.
-  data.sort((teamA,teamB)=>(teamA.P - teamB.P || teamA.GD - teamB.GD || teamA.GF - teamB.GF));
-  // sort gets ascending order, we need to reverse it for a normal league table
-  data.reverse();
-}
+// function getDataFromMatches(matches) {    
+//   matches.forEach((match) => {
+//     let homeTeam = match.home;
+//     let awayTeam = match.away;
+//     let homeGoals = match.result.split("-")[0];
+//     let awayGoals = match.result.split("-")[1];
+//     let index = data.findIndex(team => team.NAME === homeTeam);
+//     // Home team non-existant in array, let's create it with default scores
+//     if (index === -1) {
+//       data.push({NAME: homeTeam, PL: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, P: 0});
+//     }
+//     index = data.findIndex(team => team.NAME === awayTeam);
+//     // Away team non-existant in array, let's create it with default scores
+//     if (index === -1) {
+//       data.push({NAME: awayTeam, PL: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, P: 0});
+//     }
+//     // parseInt is neccesary because goals are strings at this point
+//     processMatchResult(data, homeTeam, awayTeam, parseInt(homeGoals, 10), parseInt(awayGoals, 10));
+//   });
+//   // data is filled, let's sort it by points, goal difference, goals for.
+//   data.sort((teamA,teamB)=>(teamA.P - teamB.P || teamA.GD - teamB.GD || teamA.GF - teamB.GF));
+//   // sort gets ascending order, we need to reverse it for a normal league table
+//   data.reverse();
+// }
 
-function processMatchResult(data, homeTeam, awayTeam, homeGoals, awayGoals) {
-  // We get the reference to each team object
-  let indexHT = data.findIndex(team => team.NAME === homeTeam);
-  let indexAT = data.findIndex(team => team.NAME === awayTeam);
-  // Common data (home) - plus one played and registering the goals
-  data[indexHT].PL += 1;
-  data[indexHT].GF += homeGoals;
-  data[indexHT].GA += awayGoals;
-  data[indexHT].GD = data[indexHT].GF - data[indexHT].GA;
-  // Common data (away) - plus one played and registering the goals
-  data[indexAT].PL += 1;
-  data[indexAT].GF += awayGoals;
-  data[indexAT].GA += homeGoals;
-  data[indexAT].GD = data[indexAT].GF - data[indexAT].GA;
-  // Draw
-  if (homeGoals === awayGoals) {
-    // Home team register a draw
-    data[indexHT].D += 1;
-    data[indexHT].P += 1;
-    // Away team register a draw
-    data[indexAT].D += 1;
-    data[indexAT].P += 1;
-  }
-  // Home win
-  if (homeGoals > awayGoals) {
-    // Home team register a win
-    data[indexHT].W += 1;
-    data[indexHT].P += 3;
-    // Away team register a loss
-    data[indexAT].L += 1;
-  }
-  // Away win
-  if (homeGoals < awayGoals) {
-    // Away team register a win
-    data[indexAT].W += 1;
-    data[indexAT].P += 3;
-    // Home team register a loss
-    data[indexHT].L += 1;
-  }
-}
+// function processMatchResult(data, homeTeam, awayTeam, homeGoals, awayGoals) {
+//   // We get the reference to each team object
+//   let indexHT = data.findIndex(team => team.NAME === homeTeam);
+//   let indexAT = data.findIndex(team => team.NAME === awayTeam);
+//   // Common data (home) - plus one played and registering the goals
+//   data[indexHT].PL += 1;
+//   data[indexHT].GF += homeGoals;
+//   data[indexHT].GA += awayGoals;
+//   data[indexHT].GD = data[indexHT].GF - data[indexHT].GA;
+//   // Common data (away) - plus one played and registering the goals
+//   data[indexAT].PL += 1;
+//   data[indexAT].GF += awayGoals;
+//   data[indexAT].GA += homeGoals;
+//   data[indexAT].GD = data[indexAT].GF - data[indexAT].GA;
+//   // Draw
+//   if (homeGoals === awayGoals) {
+//     // Home team register a draw
+//     data[indexHT].D += 1;
+//     data[indexHT].P += 1;
+//     // Away team register a draw
+//     data[indexAT].D += 1;
+//     data[indexAT].P += 1;
+//   }
+//   // Home win
+//   if (homeGoals > awayGoals) {
+//     // Home team register a win
+//     data[indexHT].W += 1;
+//     data[indexHT].P += 3;
+//     // Away team register a loss
+//     data[indexAT].L += 1;
+//   }
+//   // Away win
+//   if (homeGoals < awayGoals) {
+//     // Away team register a win
+//     data[indexAT].W += 1;
+//     data[indexAT].P += 3;
+//     // Home team register a loss
+//     data[indexHT].L += 1;
+//   }
+// }
 
-function insertTableHead(table, data) {
-  let head = Object.keys(data[0]);
-  let thead = table.createTHead();
-  let row = thead.insertRow();
-  row.className = "text-xs bg-purple-600 text-white font-bold";
-  for (let key of head) {
-    let th = document.createElement("th");
-    th.className = "px-6 py-2";
-    let text = document.createTextNode(key);
-    th.appendChild(text);
-    row.appendChild(th);
-  }
-}
+// function insertTableHead(table, data) {
+//   let head = Object.keys(data[0]);
+//   let thead = table.createTHead();
+//   let row = thead.insertRow();
+//   row.className = "text-xs bg-purple-600 text-white font-bold";
+//   for (let key of head) {
+//     let th = document.createElement("th");
+//     th.className = "px-6 py-2";
+//     let text = document.createTextNode(key);
+//     th.appendChild(text);
+//     row.appendChild(th);
+//   }
+// }
 
-function insertTableBody(table, data) {
-  let oddRow = true;
-  let first = true;
-  for (let team of data) {
-    let row = table.insertRow();
-    // Zebra stripe
-    if (oddRow) {
-      row.className = "bg-purple-100";
-      oddRow = false;
-    } else {
-      row.className = "bg-purple-50";
-      oddRow = true;
-    }
-    if (first) {
-      row.className = "font-semibold bg-purple-100";
-      first = false;
-    }
+// function insertTableBody(table, data) {
+//   let oddRow = true;
+//   let first = true;
+//   for (let team of data) {
+//     let row = table.insertRow();
+//     // Zebra stripe
+//     if (oddRow) {
+//       row.className = "bg-purple-100";
+//       oddRow = false;
+//     } else {
+//       row.className = "bg-purple-50";
+//       oddRow = true;
+//     }
+//     if (first) {
+//       row.className = "font-semibold bg-purple-100";
+//       first = false;
+//     }
 
-    for (let key in team) {
-      let cell = row.insertCell();
-      cell.className = "text-center p-2 border border-purple-50";
-      let text = document.createTextNode(team[key]);
-      cell.appendChild(text);
-    }
-  }
-}
+//     for (let key in team) {
+//       let cell = row.insertCell();
+//       cell.className = "text-center p-2 border border-purple-50";
+//       let text = document.createTextNode(team[key]);
+//       cell.appendChild(text);
+//     }
+//   }
+// }
 
-getDataFromMatches(matches);
-let table = document.querySelector("#friends-league");
-insertTableBody(table, data);
-insertTableHead(table, data);
+// getDataFromMatches(matches);
+// let table = document.querySelector("#friends-league");
+// insertTableBody(table, data);
+// insertTableHead(table, data);
 
 
 
