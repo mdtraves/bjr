@@ -189,18 +189,22 @@
 
         // Iterate through each match result
         data.forEach(match => {
-          const awayGoals = parseInt(match.awayGoals);
-          const homeGoals = parseInt(match.homeGoals);
+          const awayGoals = parseInt(match.awayGoals) == '' ? 0 : parseInt(match.awayGoals);
+          const homeGoals = parseInt(match.homeGoals) == '' ? 0 : parseInt(match.homeGoals);
           const awayTeam = match.awayTeam;
           const homeTeam = match.homeTeam;
 
+          
           // Update the statistics for the away team
           if (!leagueTable[awayTeam]) {
             leagueTable[awayTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0 };
           }
           leagueTable[awayTeam].goalsScored += awayGoals;
           leagueTable[awayTeam].goalsConceded += homeGoals;
+          if(!isNaN(awayGoals)){
+
           leagueTable[awayTeam].played += 1;
+          }
 
           // Update the statistics for the home team
           if (!leagueTable[homeTeam]) {
@@ -208,18 +212,27 @@
           }
           leagueTable[homeTeam].goalsScored += homeGoals;
           leagueTable[homeTeam].goalsConceded += awayGoals;
-          leagueTable[homeTeam].played += 1;
+          if(!isNaN(homeGoals)){
 
-          // Update points based on the match result
-          if (awayGoals > homeGoals) {
-            leagueTable[awayTeam].points += 3;
-          } else if (awayGoals < homeGoals) {
-            leagueTable[homeTeam].points += 3;
-          } else {
-            leagueTable[awayTeam].points += 1;
-            leagueTable[homeTeam].points += 1;
+          leagueTable[homeTeam].played += 1;
           }
+          // Update points based on the match result
+          if(homeGoals != null && awayGoals != null){
+            if (awayGoals > homeGoals) {
+              leagueTable[awayTeam].points += 3;
+            } else if (awayGoals < homeGoals) {
+              leagueTable[homeTeam].points += 3;
+            } else if (awayGoals == homeGoals) {
+              leagueTable[awayTeam].points += 1;
+              leagueTable[homeTeam].points += 1;
+            }else{
+              leagueTable[awayTeam].points += 0;
+              leagueTable[homeTeam].points += 0;
+            }
+          }
+        
         });
+      
 
         // Sort the teams based on points and goals scored
         const sortedTeams = Object.entries(leagueTable).sort((a, b) => {
