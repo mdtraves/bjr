@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bramley</title>
     <style>
+      *{
+        font-family: sans-serif
+      }
         input{
             width: 20px;
             padding: 5px;
@@ -24,7 +27,14 @@
           margin-bottom: 5px;
         }
 
-       
+       .container{
+        padding:5px
+       }
+
+       .tableRow{
+        padding:2px;
+        border: 1px solid #cccccc    
+         }
 
         #fixtureList p{
             width: 100px;
@@ -45,6 +55,7 @@
     </style>
 </head>
 <body>
+  <div class="container">
     <div class="flex" style="justify-content: center;">
       <h2>Live Scores</h2>
     </div>
@@ -65,11 +76,12 @@
 
     <h3>Table</h3>
     <div class="flex">
-      <p style="width:80px">Team </p><p style="width:40px">Pts  </p><p style="width:40px">For</p>
+      <p style="width:80px">Team </p><p style="width:40px">Pl  </p><p style="width:40px">For  </p><p style="width:40px">Ag  </p><p style="width:40px">Pts</p>
 
     </div>
     <div id="league" style="margin-bottom: 20px; display: flex; flex-direction: column;">
     </div>
+  </div>
 
 
   
@@ -184,15 +196,19 @@
 
           // Update the statistics for the away team
           if (!leagueTable[awayTeam]) {
-            leagueTable[awayTeam] = { points: 0, goalsScored: 0 };
+            leagueTable[awayTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0 };
           }
           leagueTable[awayTeam].goalsScored += awayGoals;
+          leagueTable[awayTeam].goalsConceded += homeGoals;
+          leagueTable[awayTeam].played += 1;
 
           // Update the statistics for the home team
           if (!leagueTable[homeTeam]) {
-            leagueTable[homeTeam] = { points: 0, goalsScored: 0 };
+            leagueTable[homeTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0  };
           }
           leagueTable[homeTeam].goalsScored += homeGoals;
+          leagueTable[homeTeam].goalsConceded += awayGoals;
+          leagueTable[homeTeam].played += 1;
 
           // Update points based on the match result
           if (awayGoals > homeGoals) {
@@ -224,12 +240,13 @@
 
 
         sortedTeams.forEach(([team, stats]) => {
-          const { points, goalsScored } = stats;
+          const { points, goalsScored, played, goalsConceded } = stats;
           console.log(`${team.padEnd(10)} ${points.toString().padEnd(10)} ${goalsScored.toString().padEnd(10)}`);
           const div = document.createElement("div");
           div.classList.add("flex")
+          div.classList.add("tableRow")
 
-          div.innerHTML = `<p style="width:80px">${team.padEnd(10)} </p><p style="width:40px"> ${points.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsScored.toString().padEnd(10)}</p>`
+          div.innerHTML = `<p style="width:80px">${team.padEnd(10)} </p><p style="width:40px"> ${played.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsScored.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsConceded.toString().padEnd(10)}  </p><p style="width:40px"> ${points.toString().padEnd(10)}</p>`
           league.append(div) 
 
         });
