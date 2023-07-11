@@ -1,103 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bramley</title>
-    <style>
-      *{
-        font-family: sans-serif
-      }
-        input{
-            width: 20px;
-            padding: 5px;
-            margin: 3px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bramley</title>
+  <style>
+    * {
+      font-family: sans-serif;
+    }
 
-        .flex{
-          display: flex;
-          align-items: center;
-        }
+    input {
+      width: 20px;
+      padding: 5px;
+      margin: 3px;
+    }
 
-        p{
-          margin: 3px 3px;
-        }
+    .flex {
+      display: flex;
+      align-items: center;
+    }
 
-        h3{
-          margin-bottom: 5px;
-        }
+    p {
+      margin: 3px 3px;
+    }
 
-       .container{
-        padding:5px
-       }
+    h3 {
+      margin-bottom: 5px;
+    }
 
-       .tableRow{
-        padding:2px;
-        border: 1px solid #cccccc    
-         }
+    .container {
+      padding: 5px;
+    }
 
-        #fixtureList p{
-            width: 100px;
-            display: block;
-            margin: 0 3px;
-        }
-        #fixtureList  .time{
-          margin-right: 20px;
-        }
+    .tableRow {
+      padding: 2px;
+      border: 1px solid #cccccc;
+    }
 
-        #fixtureList div{
-            display: flex;
-            
-        }
-        #fixtureList .time{
-            width: 40px
-        }
-    </style>
+    #fixtureList p {
+      width: 100px;
+      display: block;
+      margin: 0 3px;
+    }
+
+    #fixtureList .time {
+      margin-right: 20px;
+    }
+
+    #fixtureList div {
+      display: flex;
+    }
+
+    #fixtureList .time {
+      width: 40px;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="flex" style="justify-content: center;">
-      <h2>Live Scores</h2>
+<div class="container">
+  <div class="flex" style="justify-content: center;">
+    <h2>Live Scores</h2>
+  </div>
+  <div class="flex" style="justify-content: center;">
+    <h3>Add Game</h3>
+  </div>
+  <div class="flex" style="justify-content: center; width: 100%;">
+    <input type="number" name="gameNumber" id="gameNumber" placeholder="Game Number"
+           style="width:20vw; margin:5px; padding:5px">
+    <input type="text" name="homeTeam" id="homeTeam" placeholder="Home Team"
+           style="width:20vw; margin:5px; padding:5px">
+    <input type="text" name="awayTeam" id="awayTeam" placeholder="Away Team"
+           style="width:20vw; margin:5px; padding:5px">
+    <input type="submit" value="submit" id="submit"
+           style="width:20vw; margin:5px; background-color: darkblue; color: white; border-radius: 5px; padding:5px">
+  </div>
+
+  <div class="" style="margin: 40px 0;">
+    <h3>Fixtures</h3>
+    <div id="fixtureList" style="display: flex; flex-direction: column;"></div>
+  </div>
+
+  <div class="" style="margin: 40px 0;">
+    <h3>Table</h3>
+    <div class="flex " style="font-weight: 600;">
+      <p style="width:40px">Pos </p>
+      <p style="width:80px">Team </p>
+      <p style="width:40px">Pl  </p>
+      <p style="width:40px">For  </p>
+      <p style="width:40px">Ag  </p>
+      <p style="width:40px">Pts</p>
     </div>
-    <div class="flex" style="justify-content: center;">
-      <h3>Add Game</h3>
-    </div>
-    <div class="flex" style="justify-content: center; width: 100%;">
-      <input type="number" name="gameNumber" id="gameNumber" placeholder="Game Number" style="width:20vw; margin:5px; padding:5px">
-      <input type="text" name="homeTeam" id="homeTeam" placeholder="Home Team" style="width:20vw; margin:5px; padding:5px">
-      <input type="text" name="awayTeam" id="awayTeam" placeholder="Away Team" style="width:20vw; margin:5px; padding:5px">
-      <input type="submit" value="submit" id="submit" style="width:20vw; margin:5px; background-color: darkblue; color: white; border-radius: 5px; padding:5px">
-    </div>
-
-    <div class=""  style="margin: 40px 0;">
-      <h3>Fixtures</h3>
-      <div id="fixtureList" style="display: flex; flex-direction: column;"></div>
-    </div>
-
-    <div class=""  style="margin: 40px 0;">
-      <h3>Table</h3>
-      <div class="flex " style="font-weight: 600;">
-        <p style="width:40px">Pos </p><p style="width:80px">Team </p><p style="width:40px">Pl  </p><p style="width:40px">For  </p><p style="width:40px">Ag  </p><p style="width:40px">Pts</p>
-      </div>
-      <div id="league" style="margin-bottom: 20px; display: flex; flex-direction: column;"></div>
-    </div>
+    <div id="league" style="margin-bottom: 20px; display: flex; flex-direction: column;"></div>
+  </div>
 
 
-      <h4>Play Offs</h4>
-      <div id="playoff1" style="display: flex; flex-direction: column;"></div>
-      <div id="playoff2" style="display: flex; flex-direction: column;"></div>
-
- 
-    </div>  
+  <h4>Play Offs</h4>
+  <div id="playoff1" style="display: flex; flex-direction: column;"></div>
+  <div id="playoff2" style="display: flex; flex-direction: column;"></div>
 
 
+</div>
 
-    <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js'
-    import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js'
-    import { getDatabase, set, ref, onValue, child, push, update } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js'
+  import { getDatabase, set, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"
 
-    const firebaseConfig = {
+  const firebaseConfig = {
         apiKey: "AIzaSyDnOvUmGiN8txOjKQ9DFG0g8V_2xUIOL6c",
         authDomain: "bramleyjr2023.firebaseapp.com",
         databaseURL: "https://bramleyjr2023-default-rtdb.europe-west1.firebasedatabase.app",
@@ -108,222 +116,177 @@
         measurementId: "G-M2VZQW35D2"
     };
 
-    const app = initializeApp(firebaseConfig);
-
-      // ADD GAME //
-      document.getElementById ("submit").addEventListener ("click",  function (){
-        const db = getDatabase();
-        let gameNumber = document.getElementById('gameNumber').value
-        let homeTeam = document.getElementById('homeTeam').value
-        let awayTeam = document.getElementById('awayTeam').value
-        // console.log(gameNumber)
-        set(ref(db, `matches/${gameNumber}/`), {
-            homeTeam : homeTeam,
-            awayTeam : awayTeam,
-            homeGoals : 0,
-            awayGoals : 0,
-            time : "12:00"
-        });
-      });
-      // ADD GAME //
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase();
+  const matchesDB = ref(db, 'matches/');
+  const fixtureList = document.getElementById('fixtureList');
+  const playoff1 = document.getElementById('playoff1');
+  const playoff2 = document.getElementById('playoff2');
 
 
-    // DISPLAY FIXTURES //
-    const db = getDatabase();
-        let fixtureList = document.getElementById('fixtureList')
-        let playoff1 = document.getElementById('playoff1')
-        let playoff2 = document.getElementById('playoff2')
-        let closer0 = document.getElementById('closer0')
-        let closer1 = document.getElementById('closer1')
-        const matchesDB = ref(db, 'matches/');
-        onValue(matchesDB, (snapshot) => {
-        const data = snapshot.val();
-        fixtureList.innerHTML = ''
-        playoff1.innerHTML = ''
-        playoff2.innerHTML = ''
-        if(closer0) {
-          closer0.innerHTML = ''
-        }
-        if(closer1) {
-          closer1.innerHTML = ''
-        }
 
-        for (var i = 1; i < data.length; i++) {
-            
-            // console.log("i : ",i);
-            // console.log("data :", data);
-            const span = document.createElement("span");
-            span.innerHTML = `<div class='flex'><p class="time">${data[i].time}</p><p>${data[i].homeTeam}</p><input class="goals" h_a="H" gameNo="${i}" type="text" value="${data[i].homeGoals}" /><input type="text" class="goals" h_a="A" gameNo="${i}"  value="${data[i].awayGoals}" /><p>${data[i].awayTeam}</p></div>`
-            // console.log(data[i]);
-            if(data[i].game == 1){
-                playoff1.innerHTML = '';
-            }else if(data[i].game == 2){
-              playoff2.innerHTML = '';
-            }else if(data[i]){
-                fixtureList.append(span);
-            }
+  // ADD GAME //
+  document.getElementById("submit").addEventListener("click", function () {
+    let gameNumber = document.getElementById('gameNumber').value;
+    let homeTeam = document.getElementById('homeTeam').value;
+    let awayTeam = document.getElementById('awayTeam').value;
 
-        }
+    set(ref(db, `matches/${gameNumber}/`), {
+      homeTeam: homeTeam,
+      awayTeam: awayTeam,
+      homeGoals: 0,
+      awayGoals: 0,
+      time: "12:00"
     });
-    // DISPLAY FIXTURES //
+  });
+  // ADD GAME //
 
+  // DISPLAY FIXTURES //
+  onValue(matchesDB, (snapshot) => {
+    const data = snapshot.val();
+    fixtureList.innerHTML = '';
+    playoff1.innerHTML = '';
+    playoff2.innerHTML = '';
 
-    // GOAL SCORED //
-    document.body.addEventListener( 'change', function ( event ) {
-      
-        const db = getDatabase();
-        var h_a = event.target.attributes.h_a.value
-        var gameno = event.target.attributes.gameno.value
-        var score = event.target.value
-        console.log(h_a)
-        console.log(gameno)
-        console.log(score)
-        const updates = {};
+    for (let i = 1; i < data.length; i++) {
+      const { time, homeTeam, homeGoals, awayGoals, awayTeam, game } = data[i];
+      const span = document.createElement("span");
+      span.innerHTML = `<div class='flex'><p class="time">${time}</p><p>${homeTeam}</p><input class="goals" h_a="H" gameNo="${i}" type="text" value="${homeGoals}" /><input type="text" class="goals" h_a="A" gameNo="${i}"  value="${awayGoals}" /><p>${awayTeam}</p></div>`;
 
-        if(h_a == 'H'){
-            console.log('game ' + gameno + ': home team scored ' + score)
-            update(ref(db, '/matches/' + gameno), { 'homeGoals':score })
-            .then(() => {
-                console.log('updated')
-            })
-            .catch((error) => console.log(error));
+      if (game == 1) {
+        playoff1.innerHTML = '';
+      } else if (game == 2) {
+        playoff2.innerHTML = '';
+      } else {
+        fixtureList.append(span);
+      }
+    }
+  });
+  // DISPLAY FIXTURES //
+
+  // GOAL SCORED //
+  document.body.addEventListener('change', function (event) {
+    var h_a = event.target.attributes.h_a.value;
+    var gameno = event.target.attributes.gameno.value;
+    var score = event.target.value;
+
+    if (h_a == 'H') {
+      update(ref(db, `/matches/${gameno}`), { homeGoals: score })
+        .then(() => console.log(`game ${gameno}: home team scored ${score}`))
+        .catch((error) => console.log(error));
+    }
+
+    if (h_a == 'A') {
+      update(ref(db, `/matches/${gameno}`), { awayGoals: score })
+        .then(() => console.log(`game ${gameno}: away team scored ${score}`))
+        .catch((error) => console.log(error));
+    }
+  });
+  // GOAL SCORED //
+
+  // SHOW TABLE //
+  const league = document.getElementById('league');
+  onValue(matchesDB, (snapshot) => {
+    const data = snapshot.val();
+    const leagueTable = {};
+
+    data.forEach(match => {
+      const awayGoals = parseInt(match.awayGoals) || 0;
+      const homeGoals = parseInt(match.homeGoals) || 0;
+      const awayTeam = match.awayTeam;
+      const homeTeam = match.homeTeam;
+
+      if (!leagueTable[awayTeam]) {
+        leagueTable[awayTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0 };
+      }
+      if (!isNaN(awayGoals)) {
+        leagueTable[awayTeam].goalsScored += awayGoals;
+        leagueTable[awayTeam].goalsConceded += homeGoals;
+        leagueTable[awayTeam].played += 1;
+      }
+
+      if (!leagueTable[homeTeam]) {
+        leagueTable[homeTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0 };
+      }
+      if (!isNaN(homeGoals)) {
+        leagueTable[homeTeam].goalsScored += homeGoals;
+        leagueTable[homeTeam].goalsConceded += awayGoals;
+        leagueTable[homeTeam].played += 1;
+      }
+
+      if (homeGoals != null && awayGoals != null) {
+        if (awayGoals > homeGoals) {
+          leagueTable[awayTeam].points += 3;
+        } else if (awayGoals < homeGoals) {
+          leagueTable[homeTeam].points += 3;
+        } else if (awayGoals == homeGoals) {
+          leagueTable[awayTeam].points += 1;
+          leagueTable[homeTeam].points += 1;
+        } else {
+          leagueTable[awayTeam].points += 0;
+          leagueTable[homeTeam].points += 0;
         }
-        if(h_a == 'A'){
-            console.log('game ' + gameno + ': away team scored ' + score)
-            update(ref(db, '/matches/' + gameno), { 'awayGoals':score })
-            .then(() => {
-                console.log('updated')
-            })
-            .catch((error) => console.log(error));
+      }
+    });
+
+    const sortedTeams = Object.entries(leagueTable).sort((a, b) => {
+      const pointsDiff = b[1].points - a[1].points;
+      if (pointsDiff !== 0) {
+        return pointsDiff;
+      }
+      return b[1].goalsScored - a[1].goalsScored;
+    });
+
+    if (data.length <= 12) {
+      const playoffsFixtures = [
+        { homeTeam: sortedTeams[0][0], awayTeam: sortedTeams[3][0] },
+        { homeTeam: sortedTeams[1][0], awayTeam: sortedTeams[2][0] }
+      ];
+
+      const playoffsContainer = document.createElement("div");
+
+     
+
+      playoffsFixtures.forEach((fixture, index) => {
+
+        const closer0 = document.getElementById('closer0');
+        const closer1 = document.getElementById('closer1');
+        if (closer0) {
+        closer0.remove();
         }
-        
-    } );
-    // GOAL SCORED //
+        if (closer1) {
+          closer1.remove();
+        }
+        const fixtureElement = document.createElement("div");
+        fixtureElement.classList.add("flex");
+        fixtureElement.setAttribute("id", `closer${index}`);
 
+        fixtureElement.innerHTML = `
+          <p class="time">${data.length + index + 1}</p>
+          <p>${fixture.homeTeam}</p>
+          <input class="goals" h_a="H" gameNo="${data.length + index + 1}" type="text" value="0" />
+          <input class="goals" h_a="A" gameNo="${data.length + index + 1}" type="text" value="0" />
+          <p>${fixture.awayTeam}</p>
+        `;
 
-    // SHOW TABLE //
-        var league = document.getElementById('league')
-        onValue(matchesDB, (snapshot) => {
-        const data = snapshot.val();
+        playoffsContainer.appendChild(fixtureElement);
+      });
 
-        const leagueTable = {};
+      document.querySelector(".container").appendChild(playoffsContainer);
+    }
 
-        // Iterate through each match result
-        data.forEach(match => {
-          const awayGoals = parseInt(match.awayGoals) == '' ? 0 : parseInt(match.awayGoals);
-          const homeGoals = parseInt(match.homeGoals) == '' ? 0 : parseInt(match.homeGoals);
-          const awayTeam = match.awayTeam;
-          const homeTeam = match.homeTeam;
+    league.innerHTML = '';
 
-          // Update the statistics for the away team
-          if (!leagueTable[awayTeam]) {
-            leagueTable[awayTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0 };
-          }
-          if(!isNaN(awayGoals)){
+    sortedTeams.forEach(([team, stats], i) => {
+      const { points, goalsScored, played, goalsConceded } = stats;
+      const div = document.createElement("div");
+      div.classList.add("flex");
+      div.classList.add("tableRow");
 
-          leagueTable[awayTeam].goalsScored += awayGoals;
-          leagueTable[awayTeam].goalsConceded += homeGoals;
-          leagueTable[awayTeam].played += 1;
-          }
-
-          // Update the statistics for the home team
-          if (!leagueTable[homeTeam]) {
-            leagueTable[homeTeam] = { points: 0, goalsScored: 0, goalsConceded: 0, played: 0  };
-          }
-          if(!isNaN(homeGoals)){
-          leagueTable[homeTeam].goalsScored += homeGoals;
-          leagueTable[homeTeam].goalsConceded += awayGoals;
-          leagueTable[homeTeam].played += 1;
-          }
-          // Update points based on the match result
-          if(homeGoals != null && awayGoals != null){
-            if (awayGoals > homeGoals) {
-              leagueTable[awayTeam].points += 3;
-            } else if (awayGoals < homeGoals) {
-              leagueTable[homeTeam].points += 3;
-            } else if (awayGoals == homeGoals) {
-              leagueTable[awayTeam].points += 1;
-              leagueTable[homeTeam].points += 1;
-            }else{
-              leagueTable[awayTeam].points += 0;
-              leagueTable[homeTeam].points += 0;
-            }
-          }
-        
-        });
-
-        // Sort the teams based on points and goals scored
-        const sortedTeams = Object.entries(leagueTable).sort((a, b) => {
-          const pointsDiff = b[1].points - a[1].points;
-          if (pointsDiff !== 0) {
-            return pointsDiff;
-          }
-          return b[1].goalsScored - a[1].goalsScored;
-        });
-
-        if (data.length <= 12) {
-           // Display playoffs fixtures
-            const playoffsFixtures = [
-              { homeTeam: sortedTeams[0][0], awayTeam: sortedTeams[3][0] },
-              { homeTeam: sortedTeams[1][0], awayTeam: sortedTeams[2][0] }
-            ];
-
-            const playoffsContainer = document.createElement("div");
-
-            let closer0 = document.getElementById('closer0')
-            let closer1 = document.getElementById('closer1')
-       
-            if(closer0) {
-              closer0.innerHTML = ''
-            }
-            if(closer1) {
-              closer1.innerHTML = ''
-            }
-
-            playoffsFixtures.forEach((fixture, index) => {
-              const fixtureElement = document.createElement("div");
-              fixtureElement.classList.add("flex");
-              fixtureElement.setAttribute("id", `closer${index}`);
-
-              fixtureElement.innerHTML = `
-                <p class="time">${data.length + index + 1}</p>
-                <p>${fixture.homeTeam}</p>
-                <input class="goals" h_a="H" gameNo="${data.length + index + 1}" type="text" value="0" />
-                <input class="goals" h_a="A" gameNo="${data.length + index + 1}" type="text" value="0" />
-                <p>${fixture.awayTeam}</p>
-              `;
-
-              playoffsContainer.appendChild(fixtureElement);
-            });
-
-            document.querySelector(".container").appendChild(playoffsContainer);
-          }
-
-        // Display the league table
-        var league = document.getElementById('league')
-        league.innerHTML = ''
-
-    
-        console.log("League Table:");
-        console.log(`${"Team".padEnd(10)} ${"Points".padEnd(10)} ${"Goals Scored".padEnd(10)}`);
-
-
-        sortedTeams.forEach(([team, stats], i) => {
-          const { points, goalsScored, played, goalsConceded } = stats;
-          console.log(`${team.padEnd(10)} ${points.toString().padEnd(10)} ${goalsScored.toString().padEnd(10)}`);
-          const div = document.createElement("div");
-          div.classList.add("flex")
-          div.classList.add("tableRow")
-
-          div.innerHTML = `<p style="width:40px">${i + 1} </p><p style="width:80px">${team.padEnd(10)} </p><p style="width:40px"> ${played.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsScored.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsConceded.toString().padEnd(10)}  </p><p style="width:40px"> ${points.toString().padEnd(10)}</p>`
-          league.append(div) 
-
-        });
-
-        });
-
-      
-
-  </script>
+      div.innerHTML = `<p style="width:40px">${i + 1} </p><p style="width:80px">${team.padEnd(10)} </p><p style="width:40px"> ${played.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsScored.toString().padEnd(10)}  </p><p style="width:40px"> ${goalsConceded.toString().padEnd(10)}  </p><p style="width:40px"> ${points.toString().padEnd(10)}</p>`;
+      league.append(div);
+    });
+  });
+</script>
 </body>
 </html>
